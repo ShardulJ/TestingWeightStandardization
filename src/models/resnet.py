@@ -42,8 +42,9 @@ class Resnet(nn.Module):
 		self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2, paddding=1)
 
 
-	def _make_layer(self, ):
-		pass
+	def _make_layer(self, block, planes, blocks, stride=1, use_ws=False):
+		layers = []
+		return nn.Sequential(*layers)
 
 	def forward(self,):
 		pass
