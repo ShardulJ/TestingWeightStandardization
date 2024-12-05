@@ -11,4 +11,6 @@ class WSConv2d(nn.Conv2d):
 		weight_mean = weight.mean(dim=(1,2,3), keep_dim=True)
 		weight = weight - weight_mean
 		std = weight.view(weight.size(0), -1).std(dim=1, keepdim=True) + 1e-5
-		return x #temporary
+		weight = weight/std.view(-1,1,1,1)
+
+		return F.conv2d(x, weight, self.bias, self.stride, self.padding, self.dilation, self.groups)
