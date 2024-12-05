@@ -41,9 +41,31 @@ class Resnet(nn.Module):
 		self.relu = nn.ReLU(inplace=True)
 		self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2, paddding=1)
 
+		self.layer1 = self._make_layer(BasicBlock, 64, 2, stride=1, use_ws=True)
+		self.layer2 = self._make_layer(BasicBlock, 128, 2, stride=2, use_ws=True)
+		self.layer3 = self._make_layer(BasicBlock, 256, 2, stride=2, use_ws=True)
+		self.layer4 = self._make_layer(BasicBlock, 512, 2, stride=2, use_ws=True)
+
+		self.avgpool = nn.AdaptiveAvgPool2d((1,1))
+		self.dropout = nn.Dropout(p=0.5)
+		self.fc = nn.Linear(512 * block.expansion, num_classes)
 
 	def _make_layer(self, block, planes, blocks, stride=1, use_ws=False):
 		layers = []
+		downsample = None
+
+		if stride != 1 or self.inplanes != planes * block.expansion:
+			downsample = nn.Sequential(
+                nn.Conv2d(self.inplanes, planes * block.expansion, stride),
+                nn.BatchNorm2d(planes * block.expansion),
+            )
+
+        layers.append(block(self.inplanes, planes, stride, downsample, use_ws=use_ws))
+    	self.inplanes = planes * block.expansion
+
+    	for _ in range(1, blocks):
+        	layers.append(block(self.inplanes, planes, use_ws=use_ws))
+
 		return nn.Sequential(*layers)
 
 	def forward(self,):
