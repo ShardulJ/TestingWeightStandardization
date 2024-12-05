@@ -56,9 +56,9 @@ class Resnet(nn.Module):
 
 		if stride != 1 or self.inplanes != planes * block.expansion:
 			downsample = nn.Sequential(
-                nn.Conv2d(self.inplanes, planes * block.expansion, stride),
-                nn.BatchNorm2d(planes * block.expansion),
-            )
+			    nn.Conv2d(self.inplanes, planes * block.expansion, stride),
+			    nn.BatchNorm2d(planes * block.expansion),
+			)
 
 		layers.append(block(self.inplanes, planes, stride, downsample, use_ws=use_ws))
 		self.inplanes = planes * block.expansion
