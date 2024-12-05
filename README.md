@@ -20,4 +20,10 @@ This project demonstrates the implementation of **Weight Standardization** as a 
 ## Models
 
 - **Weight Standardization**: Implemented in `src/utils/weight_standardization.py` using a custom convolutional layer (`WSConv2d`).
-- **ResNet Architecture**: Defined in `src/models/resnet.py`, including a modified version with bottleneck blocks.
+- **ResNet Architecture**: Defined in `src/models/resnet.py`, including a modified version with bottleneck blocks(not implemented yet).
+
+## Testing the Resnet
+
+```
+#yet to be implemented
+```

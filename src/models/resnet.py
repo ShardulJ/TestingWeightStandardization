@@ -85,3 +85,7 @@ class Resnet(nn.Module):
 		x = self.fc(x)
 
 		return x
+
+def resnet18(block, layers=18, use_ws=True):
+	return Resnet(blo)
+
