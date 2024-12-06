@@ -5,6 +5,9 @@ import torch.nn.functional as F
 from src.utils.weight_standardization import WSConv2d
 
 class BasicBlock(nn.Module):
+
+	expansion = 1
+
 	def __init__(self, inplanes, planes, strides =1, downsample = None, use_ws = False, num_groups = 32):
 		super().__init__()
 		conv_layer = WSConv2d if use_ws else nn.Conv2d
@@ -39,12 +42,12 @@ class Resnet(nn.Module):
 		self.conv1 = conv_layer(3, 64, kernel_size=7, stride=2, padding=3, bias=False)
 		self.bn1 = nn.BatchNorm2d(64)
 		self.relu = nn.ReLU(inplace=True)
-		self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2, paddding=1)
+		self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
 
-		self.layer1 = self._make_layer(BasicBlock, 64, 2, stride=1, use_ws=True)
-		self.layer2 = self._make_layer(BasicBlock, 128, 2, stride=2, use_ws=True)
-		self.layer3 = self._make_layer(BasicBlock, 256, 2, stride=2, use_ws=True)
-		self.layer4 = self._make_layer(BasicBlock, 512, 2, stride=2, use_ws=True)
+		self.layer1 = self._make_layer(BasicBlock, 64, layers[0], stride=1, use_ws=True)
+		self.layer2 = self._make_layer(BasicBlock, 128, layers[1], stride=2, use_ws=True)
+		self.layer3 = self._make_layer(BasicBlock, 256, layers[2], stride=2, use_ws=True)
+		self.layer4 = self._make_layer(BasicBlock, 512, layers[3], stride=2, use_ws=True)
 
 		self.avgpool = nn.AdaptiveAvgPool2d((1,1))
 		self.dropout = nn.Dropout(p=0.5)
@@ -86,6 +89,6 @@ class Resnet(nn.Module):
 
 		return x
 
-def resnet18(block, layers=18, use_ws=True):
-	return Resnet(blo)
+def resnet18(num_classes=10, use_ws=False):
+	return Resnet(BasicBlock, [2,2,2,2], num_classes=num_classes,use_ws=use_ws)
 
